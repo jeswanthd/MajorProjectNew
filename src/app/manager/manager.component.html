@@ -1,0 +1,467 @@
+<div>
+    <header>
+
+        <!-- Sidebar -->
+        <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white"
+            style="border: 1px solid black;  overflow-y: auto;">
+            <div class="position-sticky">
+                <div class="list-group list-group-flush mx-3 mt-4 ">
+
+                    <a class="list-group-item list-group-item-action py-2 ripple active " aria-current="true">
+                        <i class="fas fa-tachometer-alt fa-fw me-3 "></i><span class="shadow">Manager dashboard</span>
+                    </a>
+
+                </div>
+                <br>
+                <div id="Inventory">
+                    <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span
+                            style="font-size: large; margin-left: 20px;" (click)="displayInventory()"
+                            (click)="updateSelectedItem('Display Inventory')">Display
+                            Inventory</span></a>
+                </div>
+                <br>
+                <div id="Customer">
+                    <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span
+                            style="font-size: large; margin-left: 20px;" (click)="displayCustomers()"
+                            (click)="updateSelectedItem('Display Customers')">Display
+                            Customer</span></a>
+                </div>
+                <br>
+                <div id="Drivers">
+                    <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span
+                            style="font-size: large; margin-left: 20px;" (click)="displayDrivers()"
+                            (click)="updateSelectedItem('Display Driver')">Display
+                            Drivers</span></a>
+                </div>
+                <br>
+                <div id="Orders">
+                    <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span
+                            style="font-size: large; margin-left: 20px;" (click)="displayOrders()"
+                            (click)="updateSelectedItem('Display Orders')">Display
+                            Orders</span></a>
+                </div>
+                <br>
+                <div id="Resources">
+                    <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span
+                            style="font-size: large; margin-left: 20px;" (click)="displayResources()"
+                            (click)="updateSelectedItem('Display Resources')">Display
+                            Resources</span></a>
+                </div>
+                <br>
+                <div id="Shipments">
+                    <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span
+                            style="font-size: large; margin-left: 20px;" (click)="displayShipments()"
+                            (click)="updateSelectedItem('Display Shipments')">Display
+                            Shipments</span></a>
+                </div>
+                <br>
+                <div id="Vehicles">
+                    <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span
+                            style="font-size: large; margin-left: 20px;" (click)="displayVehicles()"
+                            (click)="updateSelectedItem('Display Vehicles')">Display
+                            Vehicles</span></a>
+                </div>
+                <br>
+                <div id="Assign order">
+                    <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span
+                            style="font-size: large; margin-left: 20px;" 
+                            (click)="displayAllOrders()" 
+                            (click)="displayResources()" 
+                            (click)="displayVehicles()"
+                             (click)="updateSelectedItem('Assign Order')" 
+                             (click)="displayAvailableDrivers()"
+                              (click)="displayAvailableOrders()" 
+                              (click)="displayAvailableVehicles()"
+                              (click)="displayOrders()">
+                              Assign orders</span></a>
+                </div>
+            </div>
+
+
+        </nav>
+        <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top mb-1"
+            style="border: 1px solid black;">
+            <!-- Container wrapper -->
+            <div class="container-fluid">
+
+                <h4>Logistic's Application</h4>
+
+
+                <!-- Right links -->
+                <ul class="navbar-nav ms-auto d-flex flex-row">
+                    <li class="nav-item">Hello {{ManagerArray[0]?.managerName}}!! &nbsp;&nbsp;</li>
+                    <button [routerLink]="['/login']" class="btn btn-outline-danger btn-sm ">Logout</button>
+                    <li class="nav-item dropdown">
+
+                    </li>
+                </ul>
+            </div>
+            <!-- Container wrapper -->
+        </nav>
+
+
+        <!-- Navbar -->
+    </header>
+
+    <!--Main Navigation-->
+
+    <!--Main layout-->
+
+    <main style="margin-top: 10px;">
+
+      
+        <div *ngIf="selected == 'Display Inventory'">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">
+                            Inventory Items
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div *ngFor="let list of ResultListDisplay" class="card mb-3">
+                                        <div class="row no-gutters">
+                                            <div class="col-md-4">
+                                                <img src="../../assets/{{ list.itemImg }}"
+                                                    class="img-thumbnail custom-img" alt="{{ list.itemName }}">
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{list.itemName}}</h5>
+                                                    <p class="card-text">Price: {{list.price}}</p>
+                                                    <p class="card-text">Quantity: {{list.quantity}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="selected=='Display Manager'">
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>ManagerName</th>
+                        <th>Contact No</th>
+
+                    </tr>
+                </thead>
+                <tbody *ngFor="let list of ResultListDisplay">
+                    <tr>
+                        <th>{{list.managerId}} </th>
+                        <td>{{list.managerName}}</td>
+                        <td>{{list.managerPhonoNo}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div *ngIf="selected=='Display Customers'">
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>CustomerName</th>
+                        <th>Contact No</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let list of ResultListDisplay">
+                    <tr>
+                        <th>{{list.customerId}} </th>
+                        <td>{{list.customerName}}</td>
+                        <td>{{list.customerPhoneNo}}</td>
+                        <td>{{list.customerAddress}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div *ngIf="selected=='Display Driver'">
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Driver Name</th>
+                        <th>Contact No</th>
+
+                    </tr>
+                </thead>
+                <tbody *ngFor="let list of ResultListDisplay">
+                    <tr>
+                        <th>{{list.driverId}} </th>
+                        <td>{{list.driverName}}</td>
+                        <td>{{list.driverPhoneNo}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div *ngIf="selected=='Display Orders'">
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Customer Id</th>
+                   
+                        <th>Item Name</th>
+                        <th>Item Quantity</th>
+                        <th>Order Status</th>
+                        <th>Destination</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let list of ResultListDisplay2">
+                    <tr>
+                        <th>{{list.orderId}} </th>
+                        <th>{{list.customerId}} </th>
+                  
+                        <th>{{list.itemName}} </th>
+                        <th>{{list.itemQuantity}} </th>
+                        <td>{{list.currentStatus}}</td>
+                        <td>{{list.destination}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div *ngIf="selected=='Display Resources'">
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Driver Id</th>
+                        <th>Driver Name</th>
+                        <th>Driver Phone No</th>
+                        <th>Driver Availabilty Status</th>
+                        <th>Current Assignment</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let list of ResultListDisplay">
+                    <tr>
+                        <th>{{list.resourceId}} </th>
+                        <td>{{list.driverid}} </td>
+                        <td>{{list.driverName}} </td>
+                        <td>{{list.driverPhoneNo}} </td>
+                        <td>{{list.driverAvailabilityStatus}} </td>
+                        <td>{{list.currentassignment}}</td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div *ngIf="selected=='Display Shipments'">
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>Shipment Id</th>
+                        <th>Order Id</th>
+                        <th>Customer Id</th>
+                        <th>Customer name</th>
+                        <th>Orgin</th>
+                        <th>Destination</th>
+                        <th>Current Status</th>
+                        <th>Order Placed Date</th>
+                        <th>Expected Delivery Date</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let list of ResultListDisplay">
+                    <tr>
+                        <th>{{list.shipmentId}} </th>
+                        <td>{{list.orderId}}</td>
+                        <td>{{list.customerId}}</td>
+                        <td>{{list.customerName}}</td>
+                        <td>{{list.origin}}</td>
+                        <td>{{list.destination}}</td>
+                        <td>{{list.currentStatus}}</td>
+                        <td>{{list.orderPlacedDate}}</td>
+                        <td>{{list.expectedDelivery}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        
+        <div *ngIf="selected=='Display Vehicles'">
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>Vehicle Id</th>
+                        <th>Vehicle Name</th>
+                        <th>Vehicle Number</th>
+                        <th>Vehicle Availability Status</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let list of ResultListDisplay3">
+                    <tr>
+                        <th>{{list.vehicleId}} </th>
+                        <td>{{list.vehicleName}}</td>
+                        <td>{{list.vehicleNumber}}</td>
+                        <td>{{list.vehicleAvailabilityStatus}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div *ngIf="selected == 'Assign Order'" class="row">
+          <!-- Driver Information -->
+          <div class="col-md-6">
+              <div class="card">
+                  <div class="card-header">
+                      Driver Information
+                  </div>
+                  <div class="card-body">
+                      <!-- Select Driver -->
+                      <div class="form-group">
+                          <select name="selectDriver" class="form-control custom-select" id="selectDriver" [(ngModel)]="assigining.DriverDetails" [(ngModel)]="selectedDriverId">
+                              <option value="" disabled>Select Driver</option>
+                              <option *ngFor="let driver of AvailableDrivers" [value]="driver.driverid">{{ driver.driverName }} (ID: {{ driver.driverid }})</option>
+                          </select>
+                      </div>
+                      <!-- Driver Table -->
+                      <div class="table-responsive">
+                          <table class="table table-bordered">
+                              <thead>
+                                  <tr>
+                                      <th>Driver Id</th>
+                                      <th>Driver Name</th>
+                                      <th>Phone No</th>
+                                      <th>Status</th>
+                                      <th>Vehicle</th>
+                                  </tr>
+                              </thead>
+                              <tbody *ngFor="let driver of ResultListDisplay">
+                                  <tr>
+                                      <td>{{ driver.driverid }}</td>
+                                      <td>{{ driver.driverName }}</td>
+                                      <td>{{ driver.driverPhoneNo }}</td>
+                                      <td>{{ driver.driverAvailabilityStatus }}</td>
+                                      <td>{{ driver.vehicleAllocated }}</td> <!-- Added vehicleAllocated column -->
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      
+          <!-- Vehicle Information -->
+          <div class="col-md-6">
+              <div class="card">
+                  <div class="card-header">
+                      Vehicle Information
+                  </div>
+                  <div class="card-body">
+
+
+                      <!-- Select Vehicle -->
+
+
+                      <div class="form-group">
+                          <select name="selectVehicle" class="form-control custom-select" id="selectVehicle" [(ngModel)]="assigining.VehicleNum" [(ngModel)]="selectedVehicleId">
+                              <option value="" disabled>Select Vehicle</option>
+                              <option *ngFor="let vehicle of AvailableVehicles" [value]="vehicle.vehicleNumber">{{ vehicle.vehicleName }} ({{ vehicle.vehicleNumber }})</option>
+                          </select>
+                      </div>
+
+
+                      <!-- Vehicle Table -->
+
+
+                      <div class="table-responsive">
+                          <table class="table table-bordered">
+                              <thead>
+                                  <tr>
+                                      <th>Id</th>
+                                      <th>Name</th>
+                                      <th>Number</th>
+                                      <th>Status</th>
+                                  </tr>
+                              </thead>
+                              <tbody *ngFor="let vehicle of ResultListDisplay3">
+                                  <tr>
+                                      <td>{{ vehicle.vehicleId }}</td>
+                                      <td>{{ vehicle.vehicleName }}</td>
+                                      <td>{{ vehicle.vehicleNumber }}</td>
+                                      <td>{{ vehicle.vehicleAvailabilityStatus }}</td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+
+
+                  </div>
+              </div>
+          </div>
+      
+          <!-- Order Information -->
+
+
+          <div class="col-md-12 mt-3">
+              <div class="card">
+                  <div class="card-header">
+                      Order Information
+                  </div>
+                  <div class="card-body">
+
+
+                      <!-- Select Order -->
+
+
+                      <div class="form-group">
+                          <select name="selectOrder" class="form-control custom-select" id="selectOrder" [(ngModel)]="assigining.OrderId" [(ngModel)]="selectedOrderId">
+                              <option value="" disabled>Select Order</option>
+                              <option *ngFor="let order of AvailableOrders" [value]="order.orderId">{{ order.orderId }} ({{ order.orderStatus }})</option>
+                          </select>
+                      </div>
+
+
+                      <!-- Order Table -->
+
+
+                      <div class="table-responsive">
+                          <table class="table table-bordered">
+                              <thead>
+                                  <tr>
+                                      <th>Order Id</th>
+                                      <th>Status</th>
+                                      <th>Destination</th>
+                                  </tr>
+                              </thead>
+                              <tbody *ngFor="let order of allorders">
+                                  <tr>
+                                      <td>{{ order.orderId }}</td>
+                                      <td>{{ order.orderStatus }}</td>
+                                      <td>{{ order.destination }}</td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+
+
+                  </div>
+              </div>
+          </div>
+      
+          <!-- Assign Button -->
+          <div class="col-md-12 mt-3">
+              <div class="text-center">
+                <button class="btn btn-success" id="AssignButton" (click)="AssignOrder()" [disabled]="selectedDriverId.length == 0 || selectedOrderId.length == 0 || selectedVehicleId.length == 0">Assign Order</button>
+              </div>
+          </div>
+      </div>
+      
+          
+    </main>
+
+</div>

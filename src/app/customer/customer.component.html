@@ -1,0 +1,432 @@
+<header>
+
+    <!-- Sidebar -->
+    <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse "
+        style="border: 1px solid black;  overflow-y: auto; background-color: #F1F0E8;">
+        <div class="position-sticky">
+            <div class="list-group list-group-flush mx-3 mt-4 ">
+
+                <a class="list-group-item list-group-item-action py-2 ripple active " aria-current="true">
+                    <i class="fas fa-tachometer-alt fa-fw me-3 "></i><span class="shadow">Customer dashboard</span>
+                </a>
+
+            </div>
+            <br>
+            <div id="MakeOrder">
+                <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span
+                        style="font-size: large; margin-left: 20px;" (click)="updateSelectedItem('Make An Order')"
+                        (click)="displayInventory()" (click)="DisplayCart()">Make an Order</span></a>
+            </div>
+
+            <br>
+            <div id="YourOrders">
+                <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span
+                        style="font-size: large; margin-left: 20px;" (click)="updateSelectedItem('Your Orders')"
+                        (click)="getOrders()" (click)="GetOrdersDetails()">Your Orders</span></a>
+            </div>
+            <br>
+            <div id="EditProfile">
+                <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span
+                        style="font-size: large; margin-left: 20px;" (click)="updateSelectedItem('Edit profile')"
+                        (click)="GetCustomerData()">Edit
+                        Profile</span></a>
+            </div>
+            <br>
+            <div id="YourWallet">
+                <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span
+                        style="font-size: large; margin-left: 20px;" (click)="updateSelectedItem('Add Money')"
+                        (click)="GetCustomerData()">Your
+                        Wallet</span></a>
+            </div>
+
+        </div>
+
+
+    </nav>
+    <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light  fixed-top mb-1"
+        style="border: 1px solid black;background-color: #F1F0E8;">
+        <!-- Container wrapper -->
+        <div class="container-fluid">
+
+            <h4>Logistic's Application</h4>
+
+
+            <!-- Right links -->
+            <ul class="navbar-nav ms-auto d-flex flex-row">
+                <li class="nav-item" style="margin-top: 8px;">Hello {{CustArray[0]?.customerName}}!! &nbsp;&nbsp;</li>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="assets/cart.png" width="40px" height="40px" alt="My Cart"
+                    (click)="updateSelectedItem('My Cart')" (click)="DisplayCart()" (click)="GetCustomerData()"
+                    style="cursor: pointer;">
+
+                &nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;
+
+
+
+                <a (click)="logout()" style="text-decoration: none;">
+                    <img src="assets/logout.png" width="40px" height="40px" alt="Logout" style="cursor: pointer;">
+                </a>
+
+
+
+                <li class="nav-item dropdown">
+
+                </li>
+            </ul>
+
+        </div>
+        <!-- Container wrapper -->
+    </nav>
+
+
+    <!-- Navbar -->
+</header>
+
+<main style="margin-top: 10px;">
+
+
+    <div *ngIf="selected=='Make An Order'">
+        <div class="row">
+            <div class="col-md-4" *ngFor="let list of ResultListDisplay">
+                <div class="card mb-4" style="background-color: #fcd6aa;border-radius: 10px;">
+                    <img class="card-img-top" src="../../assets/{{list.itemImg}}" alt="Card image cap"
+                        style="width: 100%; height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{list.itemName}}</h5>
+                        <p class="card-text"><strong>Available:</strong> {{list.quantity}}</p>
+                        <p class="card-text"><strong>Price:</strong> &#8377;{{list.price}}</p>
+                        <ng-container *ngIf="list.quantity >= 1; else unavailable">
+                            <button class="btn btn-outline-success" (click)="AddToCart(list)">Add to Cart</button>
+                        </ng-container>
+                        <ng-template #unavailable>
+                            <p class="text-danger">Item Unavailable</p>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div *ngIf="selected === 'Your Orders'">
+        <input type="text" class="form-control mb-3" placeholder="Search orders" [(ngModel)]="searchText">
+        <div class="row">
+
+            <section class="gradient-custom">
+                <div class="container py-5 h-100">
+                    <div class="row d-flex justify-content-center align-items-center h-100">
+                        <div>
+                            <div style="border-radius: 10px;">
+                                <div class="card-header px-4 py-5 bg-grey">
+                                    <h5 class="text-muted mb-0">Thanks for your Orders, <span
+                                            style="color: #a8729a;">{{CustArray[0]?.customerName}}!!</span>!</h5>
+                                </div>
+                                <div class="card-body p-4 bg-white"
+                                    style="margin-top: 30px; margin-bottom: 10px;border-radius: 20px;"
+                                    *ngFor="let order of filteredOrders">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <p class="" style="color: #a8729a;">Receipt</p>
+                                        <p class="mb-0">Order Id: <b>{{ order.orderId }}</b></p>
+                                    </div>
+                                    <div class=" shadow-0 mb-4" *ngFor="let orderitem of CustomerOrdersDetails">
+                                        <div class="card-body" *ngIf="order.orderId == orderitem.orderId">
+                                            <div class="row border p-4">
+                                                <div class="col-md-2">
+                                                    <img src="../../assets/{{orderitem.itemImg}}" class="img-fluid"
+                                                        alt="{{orderitem.itemName}}" style="width: 70px; height: 70px;">
+                                                </div>
+                                                <div
+                                                    class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                    <p class="text-muted mb-0"><b>{{orderitem.itemName}}</b></p>
+                                                </div>
+
+                                                <div
+                                                    class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                    <p class="text-muted mb-0 small">Quantity:
+                                                        {{orderitem.itemQuantity}} <br>
+                                                        (price : {{orderitem.itemPrice}})</p>
+                                                </div>
+                                                <div
+                                                    class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                    <p class="text-muted mb-0 small">Total:<br>
+                                                        {{orderitem.totalItemPrice | currency:'INR'}}</p>
+                                                </div>
+                                                <div
+                                                    class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                    <p class="text-muted mb-0 small">{{orderitem.currentStatus}}</p>
+                                                </div>
+                                                <div
+                                                    class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                    <p class="text-muted mb-0 small"> {{orderitem.expectedDelivery |
+                                                        date}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between pt-2">
+                                        <p class="fw-bold mb-0">Order Details</p>
+                                    </div>
+                                    <div class="d-flex justify-content-between pt-2">
+                                        <p class="text-muted mb-0">Invoice Number : {{order.orderId }}</p>
+                                        <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span>
+                                            {{order.totalBillAmount | currency:'INR'}}</p>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <p class="text-muted mb-0">Invoice Date : {{ order.orderPlacedDate | date }}</p>
+                                        <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">Expected Delivery</span> <b>{{order.expectedDelivery | date}}</b></p> -->
+                                    </div>
+                                    <div class="d-flex justify-content-center mb-5 pr-4"
+                                        style="background-color: #a8729a; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                                        <h5
+                                            class="d-flex align-items-center justify-content-center text-white text-uppercase mb-0 ml-4">
+                                            Total paid: <span class="h2 mb-0 ms-2">&#8377;{{order.totalBillAmount
+                                                }}</span></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+
+    <div *ngIf="selected=='Your Orders' && ResultListDisplay.length==0">
+        <h2>Your have no orders to display</h2>
+    </div>
+
+
+    <div *ngIf="selected=='Edit profile'" class="mt-4">
+        <div class="card">
+            <div class="card-body">
+                <form #userForm="ngForm">
+                    <div class="mb-3">
+                        <label for="itemName" class="form-label"></label>
+                        <input type="text" class="form-control" id="customername" name="customername"
+                            [(ngModel)]="CustomerDetails.customerName" placeholder="Enter Customer Name" required>
+                        <div
+                            *ngIf="userForm.controls['customername']?.invalid && userForm.controls['customername'].touched">
+                            <span style="color: red;"
+                                *ngIf="userForm.controls['customername'].errors?.['required']">Name
+                                is
+                                required.</span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password:</label>
+                        <input type="password" id="password" class="form-control"
+                            [(ngModel)]="CustomerDetails.customerPassword" name="password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rePassword" class="form-label">Re-enter Password:</label>
+                        <input type="password" id="rePassword" class="form-control" [(ngModel)]="ReEnteredPassword"
+                            name="rePassword" required>
+                        <div *ngIf="ReEnteredPassword !== CustomerDetails.customerPassword">
+                            <span style="color: red;">Passwords do not match.</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="mobilenumber" class="form-label">Mobile Number</label>
+                        <input type="text" class="form-control" id="mobilenumber" name="mobilenumber"
+                            [(ngModel)]="CustomerDetails.customerPhoneNo" placeholder="Enter Mobile Number" required
+                            (keypress)="onMobileNumberKeyPress($event)" maxlength="10" pattern="[0-9]*">
+                        <div *ngIf="userForm.controls['mobilenumber']?.touched">
+                            <div *ngIf="userForm.controls['mobilenumber'].hasError('required')">
+                                <span style="color: red;">Mobile number is required.</span>
+                            </div>
+                            <div *ngIf="userForm.controls['mobilenumber'].hasError('pattern')">
+                                <span style="color: red;">Mobile number must contain only digits.</span>
+                            </div>
+                            <div *ngIf="userForm.controls['mobilenumber'].hasError('maxlength')">
+                                <span style="color: red;">Mobile number must be 10 digits long.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <button type="submit" [disabled]="userForm.invalid" class="btn btn-primary"
+                        (click)="UpdateCustomer()">Update Customer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="selected=='Add Money'">
+        <div class="card mt-4">
+            <div class="card-body">
+                <img src="https://www.shutterstock.com/image-vector/modern-abstract-flat-colorful-open-260nw-1870167379.jpg"
+                    alt="" style="max-width: 100%; height: auto; border-radius: 70%;">
+                <h5 class="card-title">Available:</h5>
+                <div class="mb-3">
+                    <h4>{{CustomerDetails.customerWallet | currency:"INR"}} </h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">Extra Money To Add:</h5>
+                <form #userForm="ngForm">
+                    <div class="mb-3">
+                        <input type="number" class="form-control" id="extraMoney" name="extraMoney" [(ngModel)]="Money"
+                            placeholder="Enter extra money" required>
+                        <div
+                            *ngIf="userForm.controls['extraMoney']?.invalid && userForm.controls['extraMoney'].touched">
+                            <span style="color: red;">Required.</span>
+                        </div>
+                    </div>
+                    <button type="submit" [disabled]="Money<=0 " class="btn btn-primary"
+                        (click)="AddMoneyToWallet(Money)">Update Wallet</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="selected=='My Cart'">
+
+        <section class="h-100 h-custom">
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12">
+                        <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                            <div class="card-body p-0">
+                                <div class="row g-0">
+                                    <div class="col-lg-8">
+                                        <div class="p-5">
+                                            <div class="d-flex justify-content-between align-items-center mb-5">
+                                                <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
+                                                <h6 class="mb-0 text-muted">No Of Items :
+                                                    &nbsp;{{CustomerCartItems.length}}</h6>
+                                            </div>
+                                            <hr class="my-4">
+                                            <div class="row mb-4 d-flex justify-content-between align-items-center"
+                                                *ngFor="let item of CustomerCartItems">
+                                                <div class="col-md-2 col-lg-2 col-xl-2">
+                                                    <img src="../../assets/{{item.itemImg}}"
+                                                        class="img-fluid rounded-3 cart-item-image"
+                                                        alt="Cotton T-shirt">
+                                                </div>
+                                                <div class="col-md-3 col-lg-3 col-xl-3">
+                                                    <h6 class="text-black mb-0">{{ item.itemName }}</h6>
+                                                </div>
+                                                <div class="col-md-3 col-lg-3 col-xl d-flex">
+
+                                                    <div class="input-group">
+                                                        Enter Quantity
+                                                        <input id="form1" min="1" max="{{ item.inventoryQuantity }}"
+                                                            name="quantity" value="1" type="number"
+                                                            [(ngModel)]="item.cartItemQuantity" (click)="DisplayCart()"
+                                                            (input)="onQuantityChange(item.itemId, item.cartId,$event)"
+                                                            class="form-control form-control-sm text-center"
+                                                            style="font-size: 14px; width: 60px;" />
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                                    <h6 class="mb-0">&#8377;Item Price : {{ item.price }}</h6>
+                                                    <h6 class="mb-0">&#8377;Total Item Price : {{item.totalPriceOfItem}}
+                                                    </h6>
+
+                                                </div>
+
+                                                <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                                    <h6 class="mb-0" style="cursor: pointer;"
+                                                        (click)="RemoveFromCart(item.cartId)">&#10005;</h6>
+                                                </div>
+                                                <div></div>
+                                                <div *ngIf="item.inventoryQuantity==item.cartItemQuantity"
+                                                    style="color: red;">
+                                                    Available Quantity Only : {{item.inventoryQuantity}}
+
+                                                </div>
+                                                <hr class="my-4">
+                                            </div>
+
+
+
+
+
+                                            <div class="pt-5">
+                                                <h6 class="mb-0">
+                                                    <a class="fas fa-long-arrow-alt-left me-2" style="color: black;">
+                                                        <span
+                                                            (click)="updateSelectedItem('Make An Order'); displayInventory()">Back
+                                                            To Inventories</span>
+                                                    </a>
+                                                </h6>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 bg-grey">
+                                        <div class="p-5">
+                                            <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
+                                            <hr class="my-4">
+
+                                            <h5 class="text-uppercase mb-3">Money In Wallet :
+                                                {{CustomerDetails.customerWallet | currency:"INR"}}</h5>
+
+                                            <div class="d-flex justify-content-between mb-4">
+                                                <h5 class="text-uppercase">No Of Items :
+                                                    &nbsp;{{CustomerCartItems.length}}</h5>
+                                            </div>
+
+
+
+                                            <hr class="my-4">
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <h5 class="text-uppercase">Total price</h5>
+                                                <h5>&#8377; {{ getTotalPrice() }}</h5>
+                                            </div>
+
+                                            <div>
+                                                {{ CheckBalance() }}
+                                            </div>
+
+                                            <div>Enter Delivery Address:<input type="text" class="form-control" name=""
+                                                    id="" [(ngModel)]="Deliverdestination"></div>
+
+                                            <div *ngIf="LowWalletBalance" style="color: red;">
+                                                You Don't Have Enough Balance to Purchase<br><br>
+                                            </div>
+                                            <br>
+                                            <br>
+
+                                            <button type="button" class="btn btn-dark btn-block btn-lg"
+                                                data-mdb-ripple-color="dark"
+                                                (click)="placeOrder(CustomerCartItems,Deliverdestination)"
+                                                [disabled]="LowWalletBalance || !Deliverdestination">
+                                                Place Order
+                                            </button>
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+
+
+
+</main>

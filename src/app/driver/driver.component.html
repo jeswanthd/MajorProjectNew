@@ -1,0 +1,183 @@
+<header>
+
+    <!-- Sidebar -->
+    <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse "
+        style="border: 1px solid black;  overflow-y: auto; background-color: #F1F0E8;">
+        <div class="position-sticky">
+            <div class="list-group list-group-flush mx-3 mt-4 ">
+
+                <a class="list-group-item list-group-item-action py-2 ripple active " aria-current="true">
+                    <i class="fas fa-tachometer-alt fa-fw me-3 "></i><span class="shadow">Driver dashboard</span>
+                </a>
+
+            </div>
+            <br>
+            <div id="MakeOrder">
+                <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span
+                        style="font-size: large; margin-left: 20px;" (click)="updateSelectedItem('Show Orders')"
+                        (click)="getOrders()" (click)="GettingDriverOrders()">My Orders</span></a>
+            </div>
+
+            <br>
+            <div id="YourOrders">
+                <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"><span
+                        style="font-size: large; margin-left: 20px;" (click)="updateSelectedItem('Update Orders')"
+                        (click)="getOrders()" (click)="GetPendingOrders()">Update Order</span></a>
+            </div>
+            <br>
+
+
+        </div>
+
+
+    </nav>
+    <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light  fixed-top mb-1"
+        style="border: 1px solid black;background-color: #F1F0E8;">
+        <!-- Container wrapper -->
+        <div class="container-fluid">
+
+            <h4>Logistic's Application</h4>
+
+
+            <!-- Right links -->
+            <ul class="navbar-nav ms-auto d-flex flex-row">
+                <li class="nav-item">Hello {{DriverArray[0]?.driverName}}!! &nbsp;&nbsp;</li>
+                <button (click)="logout()" class="btn btn-outline-danger btn-sm ">Logout</button>
+                <li class="nav-item dropdown">
+
+                </li>
+            </ul>
+        </div>
+        <!-- Container wrapper -->
+    </nav>
+
+
+    <!-- Navbar -->
+</header>
+
+<main style="margin-top: 10px;">
+
+
+    <div *ngIf="selected === 'Show Orders'" class="order-list">
+        <h1 class="mb-4">My Orders</h1>
+        <div class="row row-cols-1 row-cols-md-3">
+            <!-- First set of orders -->
+            <div *ngFor="let list of ResultListDisplay" class="col mb-4">
+                <div class="card bg-grey">
+                    <div class="card-body">
+                        <!-- Green tick icon -->
+                        <span *ngIf="isOrderDelivered(list)" class="green-tick">&#10003; Delivered</span>
+                        <h5 class="card-title">{{ list.orderId }}</h5>
+                        <p class="card-text"><strong>Destination:</strong> {{ list.destination }}</p>
+                        <p class="card-text"><strong>Status: </strong><a (click)="showOrderDetails(list)" style="text-decoration: underline; color: skyblue; cursor: pointer;">View Status</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <!-- Overlay div for order details -->
+    <div *ngIf="showDetails" class="overlay">
+        <div class="order-details">
+            <h2 class="mb-4">Order Details</h2>
+            <!-- Scrollable container for order details -->
+            <div class="scrollable-container">
+                <!-- Loop through each order in ResultListDisplay2 -->
+                <div *ngFor="let list of ResultListDisplay2" class="order-card mb-4">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <p class="card-text"><strong>Order ID:</strong> {{ list.orderId }}</p>
+                            <p class="card-text"><strong>Item:</strong> {{ list.itemName }}</p>
+                            <p class="card-text"><strong>Quantity:</strong> {{ list.itemQuantity }}</p>
+                            <p class="card-text"><strong>Expected Delivery:</strong> {{ list.expectedDelivery }}</p>
+                            <p class="card-text"><strong>Current Status:</strong> {{ list.currentStatus }}</p>
+                            <p class="card-text"><strong>Destination:</strong> {{ list.destination }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Close button -->
+            <button class="mt-4 close-button" (click)="closeDetails()">Close</button>
+        </div>
+    </div>
+    
+    
+
+
+
+
+
+    <div *ngIf="selected=='Update Orders'">
+        <div class="mt-4 p-4 rounded shadow bg-white">
+            <div class="row">
+                <div class="col" >
+                    <h5>Order ID </h5>
+                    <div *ngFor="let order of ResultListDisplay">
+                        <div *ngFor="let list of ResultListDisplay2">
+                            <div *ngIf="order.orderId == list.orderId">
+                                <p> <strong>{{ order.orderId }}</strong> : #{{ list.orderDetailsId }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col">
+                    <h5>ItemName</h5>
+                    <div *ngFor="let order of ResultListDisplay">
+                        <div *ngFor="let list of ResultListDisplay2">
+                            <div *ngIf="order.orderId == list.orderId">
+                                <p>{{ list.itemName }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col">
+                    <h5>Amount</h5>
+                    <div *ngFor="let order of ResultListDisplay">
+                        <div *ngFor="let list of ResultListDisplay2">
+                            <div *ngIf="order.orderId == list.orderId">
+                                <p>{{ list.totalItemPrice }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <h5>Delivery On</h5>
+                    <div *ngFor="let order of ResultListDisplay">
+                        <div *ngFor="let list of ResultListDisplay2">
+                            <div *ngIf="order.orderId == list.orderId">
+                                <p>{{ list.expectedDelivery | date }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col">
+                    <h5>Status</h5>
+                    <div *ngFor="let order of ResultListDisplay">
+                        <div *ngFor="let list of ResultListDisplay2">
+                            <div *ngIf="order.orderId == list.orderId">
+                                <p>{{ list.currentStatus }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col">
+                    <h5>Action</h5>
+                    <div *ngFor="let order of ResultListDisplay">
+                        <div *ngFor="let list of ResultListDisplay2">
+                            <div *ngIf="order.orderId == list.orderId">
+                                <button class="btn btn-sm btn-outline-primary m-1" [disabled]="list.currentStatus=='Delivered'" (click)="UpdateOrder(list)">Update Status</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</main>

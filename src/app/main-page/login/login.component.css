@@ -1,0 +1,22 @@
+body {
+    background-color: #ced5db;
+    padding: 50px;
+}
+
+.login-container {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #eeebeb;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 7px 7px 7px black;
+    border: 1px solid black;
+}
+
+
+#btn1{
+    margin-left: 130px;
+}
+.btn-register {
+    margin-top: 20px;
+}

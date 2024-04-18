@@ -1,0 +1,111 @@
+<div id="divmain" class="d-flex" style="flex-direction: column;">
+    <div class="container" id="div1">
+        <div class="container radio">
+            <input type="radio" name="Admin" [(ngModel)]="searchDesignation" value="Admin" required>
+            <label id="adminlabe" for="">Admin</label>
+            <input type="radio" name="Admin" [(ngModel)]="searchDesignation" value="Customer" required>
+            <label id="customerlabe" for="">Customer</label>
+        </div>
+    </div>
+
+    <div *ngIf="searchDesignation==''" style="margin-left: 450px;">
+        <h1 style="color: #6097ce;margin-top: 180px;"> Please select your choice</h1>
+    </div>
+
+
+    <div *ngIf="searchDesignation=='Admin'" class="m-4">
+        <form #userForm="ngForm" (ngSubmit)="addAdmin()" class="form" id="regiaterform" style="align-items: center;">
+
+            <div class="form-group">
+                <label for="adminname" class="form-label" id="intag">Admin Name:</label>
+                <input type="text" class="form-control" id="intag" name="adminname" [(ngModel)]="name"
+                    placeholder="Enter Admin Name" required>
+                <div *ngIf="userForm.controls['adminname'].invalid && userForm.controls['adminname'].touched">
+                    <span id="intag" style="color: red;"
+                        *ngIf="userForm.controls['adminname'].errors?.['required']">Admin name is required.</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label" id="intag">Password:</label>
+                <input type="password" id="intag" class="form-control" [(ngModel)]="password"
+                    placeholder="Enter Password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="rePassword" class="form-label" id="intag">Re-enter Password:</label>
+                <input type="password" id="intag" class="form-control" [(ngModel)]="rePassword"
+                    placeholder="Re-Enter Password" name="rePassword" required>
+                <div *ngIf="rePassword !== password">
+                    <span id="intag" style="color: red;">Passwords do not match.</span>
+                </div>
+            </div>
+            <br>
+            <button type="submit" [disabled]="userForm.invalid || rePassword !== password"
+                class="btn btn-primary btn-block" id="intag">Register</button>
+        </form>
+    </div>
+
+    <div *ngIf="searchDesignation=='Customer'" class="m-4">
+        <form #userForm="ngForm" (ngSubmit)="addCustomer()" id="regiaterform" class="form">
+
+            <div class="form-group">
+                <label for="customerName" class="form-label" id="intag">Customer Name:</label>
+                <input type="text" class="form-control" id="intag" name="customerName" [(ngModel)]="name"
+                    placeholder="Enter Customer Name" required>
+                <div *ngIf="userForm.controls['customerName'].invalid && userForm.controls['customerName'].touched">
+                    <span id="intag" style="color: red;"
+                        *ngIf="userForm.controls['customerName'].errors?.['required']">Customer name is required.</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="customerPassword" class="form-label" id="intag">Password:</label>
+                <input type="password" id="intag" class="form-control" [(ngModel)]="password"
+                [ngModelOptions]="{standalone: true}" placeholder="Enter Password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="customerPassword" class="form-label" id="intag">Re-enter Password:</label>
+                <input type="password" id="intag" class="form-control" [(ngModel)]="rePassword"
+                    placeholder="Re-Enter Password" name="rePassword" required>
+                <div *ngIf="rePassword !== password">
+                    <span id="intag" style="color: red;">Passwords do not match.</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="mobilenumber" class="form-label" id="intag">Mobile Number</label>
+                <input type="text" class="form-control" id="intag" name="mobilenumber"
+                    [(ngModel)]="mobilenumber" placeholder="Enter Mobile Number" required
+                    (keypress)="onMobileNumberKeyPress($event)" maxlength="10" pattern="[0-9]*">
+                <div *ngIf="userForm.controls['mobilenumber'].touched">
+                    <div *ngIf="userForm.controls['mobilenumber'].hasError('required')">
+                        <span style="color: red;"id="intag">Mobile number is required.</span>
+                    </div>
+                    <div *ngIf="userForm.controls['mobilenumber'].hasError('pattern')">
+                        <span style="color: red;"id="intag">Mobile number must contain only digits.</span>
+                    </div>
+                    <div *ngIf="userForm.controls['mobilenumber'].hasError('maxlength')">
+                        <span style="color: red;"id="intag">Mobile number must be 10 digits long.</span>
+                    </div>
+                </div>  
+            </div>
+
+            <div class="form-group">
+                <label for="customerAddress" id="intag">Address:</label>
+                <textarea id="intag" name="customerAddress" class="form-control" rows="3" cols="1" [(ngModel)]="address"
+                    [ngModelOptions]="{standalone: true}" required></textarea>
+            </div>
+            <br>
+            <button type="submit" id="intag" class="btn btn-primary" [disabled]="userForm.invalid || rePassword !== password">Register </button>
+        </form>
+    </div>
+
+</div>
+
+
+
+
+
+<router-outlet></router-outlet>
